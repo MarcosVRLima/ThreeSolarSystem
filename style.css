@@ -1,0 +1,20 @@
+body { margin: 0; }
+
+canvas { display: block; }
+
+input[type=range]{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  left: 15px;
+}
+
+input[type=range]::after{
+  content: "Speed time";
+  position: relative;
+  top: 15px;
+  color: white;
+}
