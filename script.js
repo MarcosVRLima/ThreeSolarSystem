@@ -7,7 +7,7 @@ var speed_time = 1e-5;
 
 document.getElementById("speed-time").addEventListener("change", () => {
   let setting_speed = parseFloat(document.getElementById("speed-time").value) / 100;
-  speed_time = 1e-6 * setting_speed;
+  speed_time = 1e-5 * setting_speed;
 })
 
 const setPos = (instance, x=0, y=0, z=0) => {
@@ -32,6 +32,13 @@ const translation = (instance, instance_center, angular_speed) => {
   instance.position.z = center_z + radius * Math.sin(Math.PI * 2 * t * angular_speed);
 }
 
+const translateMoon = (moon, earth, radius, angular_speed) => {
+  const angle = t * angular_speed;
+  const x = earth.position.x + radius * Math.cos(angle);
+  const z = earth.position.z + radius * Math.sin(angle);
+  moon.position.set(x, moon.position.y, z);
+};
+
 const getDistance = (instance1, instance2) => {
   let pos1 = getPos(instance1);
   let pos2 = getPos(instance2);
@@ -43,7 +50,7 @@ const passTime = (speed = 1e-10) => {
 }
 
 const newInstance = (radius, texture_path, name = "") => {
-  const sphere = new THREE.SphereGeometry(radius,32,32);
+  const sphere = new THREE.SphereGeometry(radius,64,64);
   const texture = textureLoader.load(texture_path);
   const material = new THREE.MeshBasicMaterial({ map: texture });
   const instance = new THREE.Mesh(sphere, material);
@@ -118,8 +125,20 @@ const controls = new OrbitControls( camera, renderer.domElement );
 controls.update()
 document.body.appendChild(renderer.domElement);
 camera.position.z += 10;
-    camera.position.y = 10;
-    camera.rotation.x = -0.8;
+camera.position.y = 10;
+camera.rotation.x = -0.8;
+
+const starTexture = new THREE.TextureLoader().load('./textures/stars.jpg');
+const starGeometry = new THREE.SphereGeometry(200, 64, 64); // Tamanho do cubo deve ser grande o suficiente para envolver toda a cena
+
+const starMaterial = new THREE.MeshBasicMaterial({
+  map: starTexture,
+  side: THREE.BackSide, // Garante que a textura seja visível do lado de dentro do cubo
+});
+
+const starField = new THREE.Mesh(starGeometry, starMaterial);
+scene.add(starField);
+
 
 const sun = newInstance(2, './textures/sun.jpg', 'sun');
 var inspected_instance = sun;
@@ -130,10 +149,11 @@ setPos(mercury, 5);
 const venus = newInstance(0.1, './textures/venus.jpg', 'venus');
 setPos(venus, 7);
 
-const earth = newInstance(0.1, './textures/earth.jpg', 'earth');
+const earth = newInstance(0.1, './textures/earth_8k.jpg', 'earth');
 setPos(earth, 9);
 const moon = newInstance(0.02, './textures/moon.jpg', 'moon');
 setPos(moon, 9.2);
+rotation(moon, 700);
 
 const mars = newInstance(0.07, './textures/mars.jpg', 'mars');
 setPos(mars, 11);
@@ -169,7 +189,7 @@ const animate = () => {
   translation(mercury, sun, 1 / 0.24);
   translation(venus, sun, -1 / 0.61);
   translation(earth, sun, 1);
-  translation(moon, earth, 1 / 365);
+  translateMoon(moon, earth, 0.2,  10);
   translation(mars, sun, 1 / 1.88);
   translation(jupiter, sun, 1 / 12);
   translation(saturn, sun, 1 / 29.5);
@@ -177,6 +197,8 @@ const animate = () => {
   translation(uranus, sun, 1 / 82.02);
 
   renderer.render(scene, camera);
+  
+console.log(ringTexture)
 };
 
 animate();
