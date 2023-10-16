@@ -31,6 +31,6 @@ O projeto exibe o Sol, os planetas e a Lua em órbita, com controle de velocidad
 
 ![Captura de Tela 2](screenshots/screenshot2.png)
 
-## Licença
+# Link 
 
-Este projeto é licenciado sob a Licença MIT - consulte o arquivo [LICENSE](LICENSE) para obter detalhes.
+- [link](https://github.com/MarcosVRLima/ThreeSolarSystem)
