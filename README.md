@@ -35,4 +35,4 @@ O projeto exibe o Sol, os planetas e a Lua em órbita, com controle de velocidad
 
 # Link 
 
-- [link](https://youtu.be/TqMfgIEK2Xk)
+- [Vídeo](https://youtu.be/TqMfgIEK2Xk)
