@@ -20,6 +20,10 @@ const rotation = (instance, speed) => {
   instance.rotation.y += speed * speed_time * 1000 * Math.PI;
 }
 
+const rotationRing = (instance, speed) => {
+  instance.rotation.z += speed * speed_time * 1000 * Math.PI;
+}
+
 const getPos = (instance) => {
   return [instance.position.x, instance.position.y, instance.position.z];
 }
@@ -129,7 +133,7 @@ camera.position.y = 10;
 camera.rotation.x = -0.8;
 
 const starTexture = new THREE.TextureLoader().load('./textures/stars.jpg');
-const starGeometry = new THREE.SphereGeometry(200, 64, 64); // Tamanho do cubo deve ser grande o suficiente para envolver toda a cena
+const starGeometry = new THREE.SphereGeometry(100, 64, 64); // Tamanho do cubo deve ser grande o suficiente para envolver toda a cena
 
 const starMaterial = new THREE.MeshBasicMaterial({
   map: starTexture,
@@ -138,7 +142,6 @@ const starMaterial = new THREE.MeshBasicMaterial({
 
 const starField = new THREE.Mesh(starGeometry, starMaterial);
 scene.add(starField);
-
 
 const sun = newInstance(2, './textures/sun.jpg', 'sun');
 var inspected_instance = sun;
@@ -164,6 +167,40 @@ setPos(jupiter, 13);
 const saturn = newInstance(0.28, './textures/saturn.jpg', 'saturn');
 setPos(saturn, 15);
 
+const ringTexture = textureLoader.load('./textures/saturn_ring.png');
+ringTexture.wrapS = THREE.RepeatWrapping; // Configura o modo de repetição para a textura (se necessário)
+
+const ringGeometry = new THREE.CircleGeometry(0.65, 64);
+
+// Aplique a textura diretamente e configure para ser transparente
+const material = new THREE.MeshBasicMaterial({ 
+  map: ringTexture,
+  side: THREE.DoubleSide,
+  transparent: true, // Permite transparência
+  alphaTest: 0.5 // Configura o limite de transparência (ajuste conforme necessário)
+});
+
+const saturnRings = new THREE.Mesh(ringGeometry, material);
+
+// Crie um grupo para Saturno e seus anéis
+const saturnGroup = new THREE.Group();
+scene.add(saturnGroup);
+
+// Adicione Saturno ao grupo
+saturnGroup.add(saturn);
+
+// Configure a posição dos anéis em relação a Saturno
+saturnRings.position.copy(saturn.position);
+
+// Adicione os anéis a Saturno no grupo
+saturnGroup.add(saturnRings); 
+
+// Rotação dos anéis para que fiquem na horizontal
+saturnRings.rotation.x = 0.8 * Math.PI / 2;
+
+// Adicione os anéis à cena
+scene.add(saturnRings);
+
 const uranus = newInstance(0.2, './textures/uranus.jpg', 'uranus');
 setPos(uranus, 17);
 
@@ -183,6 +220,7 @@ const animate = () => {
   rotation(mars, 1);      
   rotation(jupiter, 2.4);
   rotation(saturn, 1 / 0.44);
+  rotationRing(saturnRings, 1 / 0.44)
   rotation(neptune, 1 / 0.67);
   rotation(uranus, 1 / 0.71);
 
@@ -193,12 +231,11 @@ const animate = () => {
   translation(mars, sun, 1 / 1.88);
   translation(jupiter, sun, 1 / 12);
   translation(saturn, sun, 1 / 29.5);
+  translation(saturnRings, sun, 1 / 29.5);
   translation(neptune, sun, 1 / 164.79);
   translation(uranus, sun, 1 / 82.02);
 
   renderer.render(scene, camera);
-  
-console.log(ringTexture)
 };
 
 animate();

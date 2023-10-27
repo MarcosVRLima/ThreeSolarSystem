@@ -27,10 +27,12 @@ O projeto exibe o Sol, os planetas e a Lua em órbita, com controle de velocidad
 
 ## Capturas de Tela
 
-![Captura de Tela 1](screenshots/screenshot1.png)
+![Captura de Tela 1](screenshots/screen1.png)
 
-![Captura de Tela 2](screenshots/screenshot2.png)
+![Captura de Tela 2](screenshots/screen2.png)
+
+![Captura de Tela 3](screenshots/screen3.png)
 
 # Link 
 
-- [link](https://github.com/MarcosVRLima/ThreeSolarSystem)
+- [link](https://youtu.be/TqMfgIEK2Xk)
